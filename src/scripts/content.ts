@@ -6,6 +6,7 @@ async function setPageInfo(time: number) {
 }
 
 utils.settings().then(settings => {
+    console.log(settings)
     if (settings.showBackupTime == false) return;
     chrome.storage.onChanged.addListener((changes, where) => {
         if (where == "local" && Object.keys(changes).indexOf("lastBackupTime") != -1) {
@@ -34,4 +35,4 @@ utils.settings().then(settings => {
 
         document.body.appendChild(newDisplay);
     });
-})
+}).catch(err => console.log(err));

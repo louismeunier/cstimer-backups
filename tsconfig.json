@@ -8,8 +8,11 @@
       "esModuleInterop": true,
       "moduleResolution": "node",
       "skipLibCheck": true,
-      "forceConsistentCasingInFileNames": true
+      "forceConsistentCasingInFileNames": true,
+      "declaration": true,
+      "declarationDir": "."
     },
+    "include": ["src/**/*", "global.d.ts"],
     "exclude": ["./src/views"]
   }
   
