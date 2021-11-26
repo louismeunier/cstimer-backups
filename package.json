@@ -3,6 +3,7 @@
     "@rollup/plugin-commonjs": "^21.0.1",
     "@rollup/plugin-node-resolve": "^13.0.6",
     "@rollup/plugin-typescript": "^8.3.0",
+    "@tsconfig/svelte": "^2.0.1",
     "@types/chrome": "^0.0.164",
     "rollup": "^2.60.1",
     "rollup-plugin-css-only": "^3.1.0",
