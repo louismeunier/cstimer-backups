@@ -32,5 +32,11 @@
         "48": "assets/icon.png",
         "128": "assets/icon.png"
     },
-    "options_page": "options.html"
+    "options_page": "options.html",
+    "content_scripts": [
+        {
+            "matches": ["*://cstimer.net/*"],
+            "js": ["build/content.js"]
+        }
+    ]
 }

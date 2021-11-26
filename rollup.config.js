@@ -47,5 +47,18 @@ export default [
             resolve({ browser: true }),
             IS_PRODUCTION && terser()
         ]
+    },
+    {
+        input: "src/scripts/content.ts",
+        output: {
+            file: "public/build/content.js",
+            format: "iife",
+            name: "options"
+        },
+        plugins: [
+            commonjs(),
+            typescript(),
+            IS_PRODUCTION && terser()
+        ]
     }
 ]
