@@ -1,7 +1,29 @@
 import createBackup from "../scripts/backup";
 import utils from "../scripts/utils";
 
+chrome.runtime.onInstalled.addListener(async details => {
+    const DEFAULT_SETTINGS:Settings = {
+        showBackupTime: true
+    }
+
+    if (details.reason == "install") {
+        // set default settings on install
+        chrome.storage.local.set({settings: DEFAULT_SETTINGS});
+    }
+    if (details.reason == "update") {
+        // update settings if new default keys don't exist when extension is updated
+        const currentSettings = await chrome.storage.local.get("settings");
+        for (const key in DEFAULT_SETTINGS) {
+            if (!currentSettings[key]) {
+                currentSettings[key] = DEFAULT_SETTINGS[key];
+            }
+        }
+        chrome.storage.local.set(currentSettings)
+    }
+})
+
 chrome.runtime.onMessage.addListener(async (message, sender, respond) => {
+    console.log(message)
     if (message.message == "backup") {
         const tab = await utils.getCSTimerTab();
 
@@ -12,6 +34,9 @@ chrome.runtime.onMessage.addListener(async (message, sender, respond) => {
             },
             func: createBackup
         }).catch(err => console.log(err))
+    }
+    if (message.message == "open-options") { 
+        chrome.runtime.openOptionsPage();
     }
 })
 

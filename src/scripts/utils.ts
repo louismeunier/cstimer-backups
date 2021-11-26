@@ -6,5 +6,9 @@ export default {
     async getCSTimerTab() {
         const [tab] = await chrome.tabs.query({ url: "*://cstimer.net/*" })
         return tab;
+    },
+    async settings() {
+        const settings:Settings = await chrome.storage.local.get("settings");
+        return settings;
     }
 }
