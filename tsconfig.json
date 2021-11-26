@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+      "target": "esnext",
+      "module": "esnext",
+      "outDir": "extension/build",
+      "rootDir": "./src",
+      "strict": false,
+      "esModuleInterop": true,
+      "moduleResolution": "node",
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true
+    },
+    "exclude": ["./src/views"]
+  }
+  

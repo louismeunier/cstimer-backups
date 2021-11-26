@@ -11,7 +11,7 @@
         "scripting"
     ],
     "action": {
-        "default_popup": "views/popup.html"
+        "default_popup": "popup.html"
     },
     "host_permissions": [
         "*://*/*",
@@ -31,5 +31,6 @@
         "16": "assets/icon.png",
         "48": "assets/icon.png",
         "128": "assets/icon.png"
-    }
+    },
+    "options_page": "options.html"
 }

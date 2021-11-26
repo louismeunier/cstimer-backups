@@ -20,18 +20,32 @@ export default [
             IS_PRODUCTION && terser()
         ]
     },
-    // {
-    //     input: "src/views/main.ts",
-    //     output: {
-    //         file: "public/views/bundle/bundle.js",
-    //         format: "iife",
-    //         name: "popup"
-    //     },
-    //     plugins: [
-    //         svelte(),
-    //         css({ output: 'bundle.css' }),
-    //         resolve({ browser: true }),
-    //         IS_PRODUCTION && terser()
-    //     ]
-    // }
+    {
+        input: "src/views/popup/main.ts",
+        output: {
+            file: "public/build/popup/bundle.js",
+            format: "iife",
+            name: "popup"
+        },
+        plugins: [
+            svelte(),
+            css({ output: 'bundle.css' }),
+            resolve({ browser: true }),
+            IS_PRODUCTION && terser()
+        ]
+    },
+    {
+        input: "src/views/options/main.ts",
+        output: {
+            file: "public/build/options/bundle.js",
+            format: "iife",
+            name: "options"
+        },
+        plugins: [
+            svelte(),
+            css({ output: "bundle.css" }),
+            resolve({ browser: true }),
+            IS_PRODUCTION && terser()
+        ]
+    }
 ]
