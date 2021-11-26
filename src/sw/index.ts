@@ -1,5 +1,21 @@
 import createBackup from "../scripts/backup";
 import utils from "../scripts/utils";
+import alarm from "../scripts/alarms";
+/**
+ * Creates backup
+ */
+async function backup() {
+    console.log("Backing up");
+    const tab = await utils.getCSTimerTab();
+
+    if (!tab.id) return;
+    const backup = await chrome.scripting.executeScript({
+        target: {
+            tabId: tab.id
+        },
+        func: createBackup
+    }).catch(err => console.log(err))
+}
 
 chrome.runtime.onInstalled.addListener(async details => {
     const DEFAULT_SETTINGS:Settings = {
@@ -11,6 +27,9 @@ chrome.runtime.onInstalled.addListener(async details => {
         chrome.storage.local.set({settings: DEFAULT_SETTINGS});
     }
     if (details.reason == "update") {
+        // create alarm to automatically backup sessions
+        alarm.createAlarm(1, backup);
+
         // update settings if new default keys don't exist when extension is updated
         const currentSettings = await chrome.storage.local.get("settings");
         for (const key in DEFAULT_SETTINGS) {
@@ -24,17 +43,8 @@ chrome.runtime.onInstalled.addListener(async details => {
 
 chrome.runtime.onMessage.addListener(async (message, sender, respond) => {
     console.log(message)
-    if (message.message == "backup") {
-        const tab = await utils.getCSTimerTab();
-
-        if (!tab.id) return;
-        const backup = await chrome.scripting.executeScript({
-            target: {
-                tabId: tab.id
-            },
-            func: createBackup
-        }).catch(err => console.log(err))
-    }
+    if (message.message == "backup") 
+        await backup()
     if (message.message == "open-options") { 
         chrome.runtime.openOptionsPage();
     }

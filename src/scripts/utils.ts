@@ -1,4 +1,4 @@
-export default {
+const Utils =  {
     async getCurrentTab() {
         const [tab] = await chrome.tabs.query({ active: true, currentWindow: true});
         return tab;
@@ -12,3 +12,5 @@ export default {
         return settings["settings"];
     }
 }
+
+export default Utils;
