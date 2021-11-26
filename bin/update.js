@@ -38,6 +38,8 @@ switch (param) {
 console.log(`Updating ${param} version, ${currentVersion} => ${newVersion}`);
 
 packageJSON.version = newVersion;
+manifestJSON.version = newVersion;
+
 fs.writeFile(
     "package.json", 
     JSON.stringify(packageJSON, null, 4), 
@@ -46,7 +48,7 @@ fs.writeFile(
 )
 fs.writeFile(
     "public/manifest.json", 
-    JSON.stringify(packageJSON, null, 4), 
+    JSON.stringify(manifestJSON, null, 4), 
     "utf8",
     (e)=>{console.log(e)}
 )

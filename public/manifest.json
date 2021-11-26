@@ -1,26 +1,53 @@
 {
-    "devDependencies": {
-        "@rollup/plugin-commonjs": "^21.0.1",
-        "@rollup/plugin-node-resolve": "^13.0.6",
-        "@rollup/plugin-typescript": "^8.3.0",
-        "@tsconfig/svelte": "^2.0.1",
-        "@types/chrome": "^0.0.164",
-        "rollup": "^2.60.1",
-        "rollup-plugin-css-only": "^3.1.0",
-        "rollup-plugin-svelte": "^7.1.0",
-        "rollup-plugin-terser": "^7.0.2",
-        "svelte": "^3.44.2",
-        "tslib": "^2.3.1",
-        "typescript": "^4.5.2"
+    "name": "CSTimer Backups",
+    "version": "1.0.2",
+    "manifest_version": 3,
+    "description": "Automatically backup your CSTimer sessions & settings locally",
+    "permissions": [
+        "storage",
+        "tabs",
+        "downloads",
+        "activeTab",
+        "scripting",
+        "alarms"
+    ],
+    "action": {
+        "default_popup": "popup.html"
     },
-    "name": "cstimer-backups",
-    "version": "1.0.1",
-    "description": "Automatically backup your CSTimer sessions",
-    "main": "public",
-    "author": "louismeunier",
-    "license": "MIT",
-    "scripts": {
-        "watch": "rollup -c -w",
-        "build": "rollup -c"
-    }
+    "host_permissions": [
+        "*://*/*",
+        "http://*/",
+        "https://*/"
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "assets/*.*",
+                "views/*",
+                "build/*"
+            ],
+            "matches": [
+                "*://*/*"
+            ]
+        }
+    ],
+    "background": {
+        "service_worker": "build/sw.js"
+    },
+    "icons": {
+        "16": "assets/icon.png",
+        "48": "assets/icon.png",
+        "128": "assets/icon.png"
+    },
+    "options_page": "options.html",
+    "content_scripts": [
+        {
+            "matches": [
+                "*://cstimer.net/*"
+            ],
+            "js": [
+                "build/content.js"
+            ]
+        }
+    ]
 }

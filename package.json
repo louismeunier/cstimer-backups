@@ -14,7 +14,7 @@
         "typescript": "^4.5.2"
     },
     "name": "cstimer-backups",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Automatically backup your CSTimer sessions",
     "main": "public",
     "author": "louismeunier",
