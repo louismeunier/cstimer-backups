@@ -13,6 +13,6 @@
       "declarationDir": "."
     },
     "include": ["src/**/*", "global.d.ts"],
-    "exclude": ["./src/views"]
-  }
+    "exclude": ["./src/views", "./bin"]
+}
   
