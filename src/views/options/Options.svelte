@@ -1,6 +1,16 @@
 <script lang="ts">
     import { onMount } from "svelte";
 
+    async function downloadBackup() {
+        const backupSessions = await chrome.storage.local.get("backup");
+        console.log(backupSessions);
+        const url = "data:text/plain;charset=utf-8, " + encodeURIComponent(JSON.stringify(backupSessions["backup"]));
+        chrome.downloads.download({
+            filename: `csTimerBackup.txt`,
+            url:url
+        });
+
+    }
     let currentSettings;
 
     onMount(async () => {
@@ -27,8 +37,17 @@
             <input type="checkbox" checked={currentSettings.settings.showBackupTime} on:change={(e) => {
                 // @ts-ignore
                 const checked = e.target.checked;
-                chrome.storage.local.set({settings: {showBackupTime: checked}});
+                const newSettings = {...currentSettings.settings, showBackupTime: checked}
+                chrome.storage.local.set({settings: newSettings});
             }}/>
+            <input type="number" min="1" value={currentSettings.settings.interval} on:change={(e) => {
+                // @ts-ignore
+                const value = parseInt(e.target.value);
+                const newSettings = {...currentSettings.settings, interval: value};
+                chrome.storage.local.set({settings: newSettings})
+            }}/>
+            <span>{currentSettings.settings.interval}</span>
         {/if}
+        <button on:click={downloadBackup}>download latest session</button>
     </main>
 </div>

@@ -19,25 +19,31 @@ async function backup() {
 
 chrome.runtime.onInstalled.addListener(async details => {
     const DEFAULT_SETTINGS:Settings = {
-        showBackupTime: true
+        showBackupTime: true,
+        interval: 1
     }
 
     if (details.reason == "install") {
         // set default settings on install
         chrome.storage.local.set({settings: DEFAULT_SETTINGS});
+
+        alarm.createAlarm(DEFAULT_SETTINGS.interval, backup);
     }
     if (details.reason == "update") {
-        // create alarm to automatically backup sessions
-        alarm.createAlarm(1, backup);
 
         // update settings if new default keys don't exist when extension is updated
-        const currentSettings = await chrome.storage.local.get("settings");
+        const search = await chrome.storage.local.get("settings");
+        const currentSettings:Settings = search["settings"];
         for (const key in DEFAULT_SETTINGS) {
             if (!currentSettings[key]) {
                 currentSettings[key] = DEFAULT_SETTINGS[key];
             }
         }
         chrome.storage.local.set(currentSettings)
+        console.log(currentSettings);
+
+        // create alarm to automatically backup sessions
+        alarm.createAlarm(currentSettings.interval, backup);
     }
 })
 
@@ -50,9 +56,15 @@ chrome.runtime.onMessage.addListener(async (message, sender, respond) => {
     }
 })
 
-chrome.storage.onChanged.addListener((changes, area) => {
+chrome.storage.onChanged.addListener(async (changes, area) => {
     if (area == "local") {
         console.log(changes);
+        if (changes.settings) {
+            if (changes.settings.oldValue.interval != changes.settings.newValue.interval) {
+                console.log("interval changed")
+                alarm.createAlarm(changes.settings.newValue.interval, backup);
+            }
+        }
     }
 })
 export {};
