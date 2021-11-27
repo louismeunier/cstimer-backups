@@ -2,7 +2,7 @@ import utils from "./utils";
 
 async function setPageInfo(time: number) {
     const lastBackupTime = document.getElementById("--ext-last-backup-time");
-    lastBackupTime.innerText = new Date(time).toUTCString();
+    lastBackupTime.innerText = new Date(time).toLocaleString();
 }
 
 utils.settings().then(settings => {
@@ -22,7 +22,7 @@ utils.settings().then(settings => {
         newDisplay.className = "click";
 
         if (time["lastBackupTime"]) {
-            newDisplay.innerText = new Date(time["lastBackupTime"]).toUTCString();
+            newDisplay.innerText = new Date(time["lastBackupTime"]).toLocaleString();
         } else {
             newDisplay.innerText = "No backups yet";
         }
