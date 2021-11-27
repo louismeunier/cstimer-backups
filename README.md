@@ -1,5 +1,5 @@
 <div align="center">
-![cstimersaver](./public/assets/logo.svg)
+<img src="/public/assets/logo.svg"/>
 
 A chrome extension to backup and save your csTimer sessions and settings.
 </div>
