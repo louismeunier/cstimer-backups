@@ -1,6 +1,7 @@
 import createBackup from "../scripts/backup";
-import utils from "../scripts/utils";
+import utils, { Settings } from "../scripts/utils";
 import alarm from "../scripts/alarms";
+
 /**
  * Creates backup
  */
@@ -9,13 +10,27 @@ async function backup() {
     const tab = await utils.getCSTimerTab();
 
     if (!tab.id) return;
-    const backup = await chrome.scripting.executeScript({
+    await chrome.scripting.executeScript({
         target: {
             tabId: tab.id
         },
         func: createBackup
     }).catch(err => console.log(err))
 }
+
+/**
+ * Top level functions
+ * Basically an async IIFE but imitates being top level
+ * Put things that need to be immediately registered inside here, such as creating the alarm and registering a listener
+ */
+(async() => {
+    const settings = await utils.settings();
+    if (!settings) {
+        alarm.createAlarm(1, backup);
+    } else {
+        alarm.createAlarm(settings.interval, backup);
+    }
+})()
 
 chrome.runtime.onInstalled.addListener(async details => {
     const DEFAULT_SETTINGS:Settings = {
@@ -26,8 +41,6 @@ chrome.runtime.onInstalled.addListener(async details => {
     if (details.reason == "install") {
         // set default settings on install
         chrome.storage.local.set({settings: DEFAULT_SETTINGS});
-
-        alarm.createAlarm(DEFAULT_SETTINGS.interval, backup);
     }
     if (details.reason == "update") {
 
@@ -41,9 +54,6 @@ chrome.runtime.onInstalled.addListener(async details => {
         }
         chrome.storage.local.set(currentSettings)
         console.log(currentSettings);
-
-        // create alarm to automatically backup sessions
-        alarm.createAlarm(currentSettings.interval, backup);
     }
 })
 
@@ -59,7 +69,7 @@ chrome.runtime.onMessage.addListener(async (message, sender, respond) => {
 chrome.storage.onChanged.addListener(async (changes, area) => {
     if (area == "local") {
         console.log(changes);
-        if (changes.settings) {
+        if (changes.settings.oldValue && changes.settings.oldValue.interval) {
             if (changes.settings.oldValue.interval != changes.settings.newValue.interval) {
                 console.log("interval changed")
                 alarm.createAlarm(changes.settings.newValue.interval, backup);
@@ -67,4 +77,5 @@ chrome.storage.onChanged.addListener(async (changes, area) => {
         }
     }
 })
+
 export {};
