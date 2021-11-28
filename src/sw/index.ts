@@ -69,7 +69,7 @@ chrome.runtime.onMessage.addListener(async (message, sender, respond) => {
 chrome.storage.onChanged.addListener(async (changes, area) => {
     if (area == "local") {
         console.log(changes);
-        if (changes.settings.oldValue && changes.settings.oldValue.interval) {
+        if (changes.settings && changes.settings.oldValue.interval) {
             if (changes.settings.oldValue.interval != changes.settings.newValue.interval) {
                 console.log("interval changed")
                 alarm.createAlarm(changes.settings.newValue.interval, backup);
