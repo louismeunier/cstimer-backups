@@ -1,3 +1,8 @@
+export interface Settings {
+    showBackupTime?: boolean
+    interval?: number
+}
+
 const Utils =  {
     async getCurrentTab() {
         const [tab] = await chrome.tabs.query({ active: true, currentWindow: true});
