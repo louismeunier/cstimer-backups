@@ -8,7 +8,7 @@ import alarm from "../scripts/alarms";
 async function backup() {
     console.log("Backing up");
     const tab = await utils.getCSTimerTab();
-
+    console.log(new Date().toLocaleString())
     if (!tab.id) return;
     await chrome.scripting.executeScript({
         target: {
@@ -23,14 +23,14 @@ async function backup() {
  * Basically an async IIFE but imitates being top level
  * Put things that need to be immediately registered inside here, such as creating the alarm and registering a listener
  */
-(async() => {
-    const settings = await utils.settings();
+
+utils.settings().then(settings => {
     if (!settings) {
         alarm.createAlarm(1, backup);
     } else {
         alarm.createAlarm(settings.interval, backup);
-    }
-})()
+    }  
+})
 
 chrome.runtime.onInstalled.addListener(async details => {
     const DEFAULT_SETTINGS:Settings = {
